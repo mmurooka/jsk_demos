@@ -593,7 +593,10 @@
   (setq *drill-stand-coords-forced* (get-drill-grasp-stand-coords-full (send *drill* :copy-worldcoords))) 
   ;(ros::ros-info (format nil "default-stand-coords ~A" *drill-stand-coords*))
   (send *robot* :fix-leg-to-coords *drill-stand-coords*)
-  (let* ((drill-motion-av-list (if (and (equal overwrite-stand-coords? :force) (check-stand-coords *drill-stand-coords-forced* :pos-thre 0.1 :rpy-thre 4)) nil (get-drill-grasp-motion :draw? draw? :rotation-axis rotation-axis)))
+  (let* ((drill-motion-av-list (if (and (equal overwrite-stand-coords? :force)
+                                        (check-stand-coords (send (send *drill-stand-coords* :copy-worldcoords) :transformation (send *drill-stand-coords-forced* :copy-worldcoords) :local) :pos-thre 0.1 :rpy-thre 4))
+                                   nil
+                                 (get-drill-grasp-motion :draw? draw? :rotation-axis rotation-axis)))
          (drill-motion-length (length drill-motion-av-list)))
     (when (and overwrite-stand-coords? (= drill-motion-length 0))
       (setq *drill-stand-coords* *drill-stand-coords-forced*)
