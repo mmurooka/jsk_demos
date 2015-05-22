@@ -24,9 +24,12 @@
   (setq *menu-select-flag* nil)
   (ros::advertise "/rviz_menu_text" jsk_rviz_plugins::OverlayMenu 1)
   (ros::advertise-service "/rviz_menu_call" drc_task_common::RvizMenuCall #'rviz-menu-call)
-  (ros::advertise-service "/rviz_menu_up" std_srvs::Empty #'rviz-menu-up)
-  (ros::advertise-service "/rviz_menu_down" std_srvs::Empty #'rviz-menu-down)
-  (ros::advertise-service "/rviz_menu_select" drc_task_common::RvizMenuSelect #'rviz-menu-select)
+  (ros::subscribe "/rviz_menu_up" std_msgs::Empty #'rviz-menu-up)
+  (ros::subscribe "/rviz_menu_down" std_msgs::Empty #'rviz-menu-down)
+  (ros::subscribe "/rviz_menu_select" std_msgs::Float32 #'rviz-menu-select)
+  ;; (ros::advertise-service "/rviz_menu_up" std_srvs::Empty #'rviz-menu-up)
+  ;; (ros::advertise-service "/rviz_menu_down" std_srvs::Empty #'rviz-menu-down)
+  ;; (ros::advertise-service "/rviz_menu_select" drc_task_common::RvizMenuSelect #'rviz-menu-select)
   (ros::subscribe "/rviz_menu_title" std_msgs::string #'set-rviz-menu-title)
   (ros::subscribe "/rviz_menu_list" drc_task_common::StringMultiArray #'set-rviz-menu-list)
   (ros::subscribe "/rviz_menu_variable" std_msgs::Float32 #'set-rviz-variable)
@@ -75,24 +78,44 @@
     res))
 
 (defun rviz-menu-up
-  (req)
+  (msg)
   (setq *menu-index* (+ *menu-index* 1))
   (when (= *menu-index* *menu-length*)
     (setq *menu-index* 0))
-  (send req :response))
+  )
 
 (defun rviz-menu-down
-  (req)
+  (msg)
   (setq *menu-index* (- *menu-index* 1))
   (when (= *menu-index* -1)
     (setq *menu-index* (- *menu-length* 1)))
-  (send req :response))
+  )
 
 (defun rviz-menu-select
-  (req)
-  (setq *menu-variable* (send req :variable))
+  (msg)
+  (setq *menu-variable* (send msg :data))
   (setq *menu-select-flag* t)
-  (send req :response))
+  )
+
+;; (defun rviz-menu-up
+;;   (req)
+;;   (setq *menu-index* (+ *menu-index* 1))
+;;   (when (= *menu-index* *menu-length*)
+;;     (setq *menu-index* 0))
+;;   (send req :response))
+
+;; (defun rviz-menu-down
+;;   (req)
+;;   (setq *menu-index* (- *menu-index* 1))
+;;   (when (= *menu-index* -1)
+;;     (setq *menu-index* (- *menu-length* 1)))
+;;   (send req :response))
+
+;; (defun rviz-menu-select
+;;   (req)
+;;   (setq *menu-variable* (send req :variable))
+;;   (setq *menu-select-flag* t)
+;;   (send req :response))
 
 (defun set-rviz-menu-title
   (msg)

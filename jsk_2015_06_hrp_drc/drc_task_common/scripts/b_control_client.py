@@ -112,10 +112,13 @@ def b_control_client_init():
     obj_mode_next_srv = rospy.ServiceProxy('/set_object_mode_next', srv.Empty)
     ik_mode_next_srv = rospy.ServiceProxy('/set_ik_mode_next', srv.Empty)
     # menu
-    global menu_up_srv, menu_down_srv, menu_select_srv, menu_variable_pub, menu_bool_pub
-    menu_up_srv = rospy.ServiceProxy('/rviz_menu_up', srv.Empty)
-    menu_down_srv = rospy.ServiceProxy('/rviz_menu_up', srv.Empty)
-    menu_select_srv = rospy.ServiceProxy('/rviz_menu_select', RvizMenuSelect)
+    global menu_up_pub, menu_down_pub, menu_select_pub, menu_variable_pub, menu_bool_pub
+    menu_up_pub = rospy.Publisher('/rviz_menu_up', msg.Empty)
+    menu_down_pub = rospy.Publisher('/rviz_menu_up', msg.Empty)
+    menu_select_pub = rospy.Publisher('/rviz_menu_select', Float32)
+    # menu_up_srv = rospy.ServiceProxy('/rviz_menu_up', srv.Empty)
+    # menu_down_srv = rospy.ServiceProxy('/rviz_menu_up', srv.Empty)
+    # menu_select_srv = rospy.ServiceProxy('/rviz_menu_select', RvizMenuSelect)
     menu_variable_pub = rospy.Publisher('/rviz_menu_variable', Float32)
     # menu_bool_pub = rospy.Publisher('/rviz_menu_bool', Bool)
     
@@ -272,9 +275,11 @@ def b_control_joy_cb(msg):
         obj_mode_next_srv()
     # menu
     if status.buttonU8 != prev_status.buttonU8:
-        menu_down_srv()
+        menu_down_pub.publish()
+        # menu_down_srv()
     if status.buttonL8 != prev_status.buttonL8:
-        menu_select_srv(variable = status.slide8)
+        menu_select_pub.publish(Float32(data=status.slide8))
+        # menu_select_srv(variable = status.slide8)
     # if status.buttonU7 != prev_status.buttonU7:
     #     menu_bool_pub.publish(Bool(data=status.buttonU7))
     menu_v = Float32()
