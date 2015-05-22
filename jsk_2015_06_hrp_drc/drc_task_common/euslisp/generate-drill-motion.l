@@ -557,7 +557,7 @@
             (setf (matrix-column mat 1) uy)
             (setf (matrix-column mat 2) uz)
             (setq drill-oriented-coords (make-coords :pos (send drill-coords :worldpos)
-							 :rot mat))))))
+                                                     :rot mat))))))
                                         ;(setq drill-oriented-coords (send (send drill-coords :copy-worldcoords) :rotate (deg2rad -90) :z))
     (let ((drill-grasp-coords (send (send drill-oriented-coords :copy-worldcoords)
                                     :transform (get-drill-grasp-stand-coords))))
