@@ -503,7 +503,7 @@
               (send *robot* :angle-vector (car (last valve-motion-av-list)))
               (unix::sleep 1)
               (send *ri* :reach-until-touch arm (v- (send (send *valve* :copy-worldcoords) :worldpos) (send *robot* arm :end-coords :worldpos)) :thre 3 :dist-step 4)
-              (keyshot-request)
+              ;; (keyshot-request)
               (hand-start-grasp :real? real?)
               ;;judge grasped or not
               (let (grasp-pos dist-pos grasp-angle-vector (force-thre 15) (dist-thre 40))
@@ -584,7 +584,7 @@
           (progn
             (send *robot* :angle-vector (car valve-motion-av-list))
             (when real? (model2real :time 3000))
-            (keyshot-request)
+            ;; (keyshot-request)
             (hand-start-grasp :real? real?)))
         ;; rotate
         ;;(when real? (send-angle-vector-sequence-with-time (cdr (subseq valve-motion-av-list 0 (/ valve-motion-length 2))) :time 1000 :wait? t))

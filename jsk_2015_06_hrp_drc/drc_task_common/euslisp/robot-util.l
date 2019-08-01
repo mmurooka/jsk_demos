@@ -230,20 +230,20 @@
   )
 
 ;; send reach-until-touch from ocs
-(defun reach-until-touch-from-ocs
-  (limb
-   dir
-   &key (thre 10) (max-dist 150) (dist-step 10) (time-step 200) (rotation-axis t))
-  (ros::service-call "/reach_until_touch_command_from_ocs"
-                     (instance drc_task_common::ReachUntilTouchCommandRequest :init
-                               :arm_side (cond ((equal limb :rarm) drc_task_common::ReachUntilTouchCommandRequest::*RARM*)
-                                               ((equal limb :larm) drc_task_common::ReachUntilTouchCommandRequest::*LARM*)
-                                               (t drc_task_common::ReachUntilTouchCommandRequest::*RARM*))
-                               :direction (ros::pos->tf-point dir)
-                               :thre thre :max_dist max-dist
-                               :dist_step dist-step :time_step time-step :rotation_axis rotation-axis
-                               ))
-  )
+;; (defun reach-until-touch-from-ocs
+;;   (limb
+;;    dir
+;;    &key (thre 10) (max-dist 150) (dist-step 10) (time-step 200) (rotation-axis t))
+;;   (ros::service-call "/reach_until_touch_command_from_ocs"
+;;                      (instance drc_task_common::ReachUntilTouchCommandRequest :init
+;;                                :arm_side (cond ((equal limb :rarm) drc_task_common::ReachUntilTouchCommandRequest::*RARM*)
+;;                                                ((equal limb :larm) drc_task_common::ReachUntilTouchCommandRequest::*LARM*)
+;;                                                (t drc_task_common::ReachUntilTouchCommandRequest::*RARM*))
+;;                                :direction (ros::pos->tf-point dir)
+;;                                :thre thre :max_dist max-dist
+;;                                :dist_step dist-step :time_step time-step :rotation_axis rotation-axis
+;;                                ))
+;;   )
 
 ;; get potentio-vector from ocs
 (defun get-potentio-vector-from-joint-states ()
